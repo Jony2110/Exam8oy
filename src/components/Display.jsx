@@ -11,6 +11,31 @@ const Display = () => {
   const albumId = isAlbum ? location.pathname.slice(-1) : "";
   const bgColor = albumsData[Number(albumId)].bgColor;
 
+  const getToken = async () => {
+    try {
+      const response = await fetch("https://accounts.spotify.com/api/token", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+          Authorization: `Basic ${btoa(
+            "dea6433532084d309e6ca31d96d1f2db" +
+              ":" +
+              "1ffd35edff7f48ffa82e5b9d6767fcee"
+          )}`,
+        },
+        body: "grant_type=client_credentials",
+      });
+      const auth = await response.json();
+      localStorage.setItem(
+        "access_token",
+        `${auth.token_type} ${auth.access_token}`
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  getToken();
+
 
   useEffect(()=>{
     if(isAlbum) {
