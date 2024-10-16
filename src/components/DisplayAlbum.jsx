@@ -9,7 +9,7 @@ const DisplayAlbum = () => {
   const albumData = albumsData[id]
   const {playWithId} = useContext(PlayerContext)
   return (
-    <div>
+    <div className="bg-gradient-to-b from-blue-900 via-indigo-900 to-black h-screen">
       <Navbar />
       <div className="mt-10 flex gap-8 flex-col md:flex-row md:items-end">
         <img className="w-48 rounded" src={albumData.image} alt="" />

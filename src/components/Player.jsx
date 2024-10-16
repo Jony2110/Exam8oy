@@ -2,7 +2,7 @@ import { useContext } from "react";
 import { assets } from "../assets/assets";
 import { PlayerContext } from "../context/PlayerContext";
 const Player = () => {
-  const { seekBar, seekBg, playStatus, play, pause, track, time, previous, next, seekSong } =
+  const { seekBar, seekBg, playStatus, play, pause, track, time,  seekSong } =
     useContext(PlayerContext);
   return (
     <div
@@ -27,8 +27,8 @@ const Player = () => {
           {playStatus ? (
             <img
               onClick={pause}
-              className="w-4 cursor-pointer"
-              src={assets.pause_icon}
+              className="w-4 cursor-pointer bg-white"
+              src="../../public/img/play.svg"
               alt=""
             />
           ) : (
