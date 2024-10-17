@@ -25,7 +25,7 @@ const Sidebar = () => {
             <img className="w-8  rounded-md ml-7" src="./img/plus.svg" alt="stack_icon" />
             <p className="font-semibold">Create Playlist</p>
           </div>
-          <div onClick={()=>navigate('/liked')} className="flex items-center gap-3">
+          <div onClick={()=>navigate('/liked')} className="flex cursor-pointer items-center gap-3">
             <img className="w-8  ml-7" src="./img/Liked.svg" alt="stack_icon" />
             <p className="font-semibold">Liked songs</p>
           </div>

@@ -1,7 +1,9 @@
+import { Link } from "react-router-dom";
 
 
 const SideBarRight = () => {
 
+  
   return (
     <div className="w-[15%] h-full p-2 flex-col gap-2 text-white hidden lg:flex">
       <div className="bg-[#000000] h-[15%] rounded flex  gap-4 items-center justify-around">
@@ -23,7 +25,8 @@ const SideBarRight = () => {
         <p className="">Go to Settings > Social and enable “Share my listening activity on Spotify.’ You can turn this off at any time.</p>
       </div>
       <div>
-        <button className="bg-white text-black w-[12.688rem] h-[3rem] rounded-2xl text-center">Seting</button>
+        <a href="https://developer.spotify.com/dashboard"><button  className="bg-white text-black w-[12.688rem] h-[3rem] rounded-2xl text-center">SETING</button></a>
+        
       </div>
         
       <div className="bg-[#000000] h-[80%] rounded mt-4">
