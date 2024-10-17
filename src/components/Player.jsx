@@ -1,69 +1,98 @@
-import { useContext } from "react";
-import { assets } from "../assets/assets";
-import { PlayerContext } from "../context/PlayerContext";
-const Player = () => {
-  const { seekBar, seekBg, playStatus, play, pause, track, time,  seekSong } =
-    useContext(PlayerContext);
-  return (
-    <div
-      className="h-[10%] bg-black flex justify-between items-center
-    text-white px-4"
-    >
-      <div className="hidden lg:flex items-center gap-4">
-        <img className="w-12" src={track.image} alt="song_Data" />
-        <div>
-          <p>{track.name}</p>
-          <p className="">{track.desc.slice(0, 43)}</p>
-        </div>
-      </div>
-      <div className="flex flex-col items-center gap-1 m-auto">
-        <div className="flex gap-16">
-          <img
-            className="w-4 cursor-pointer"
-            src={assets.shuffle_icon}
-            alt=""
-          />
-         
-          {playStatus ? (
-            <img
-              onClick={pause}
-              className="w-4 cursor-pointer bg-white"
-              src="../../public/img/play.svg"
-              alt=""
-            />
-          ) : (
-            <img
-              onClick={play}
-              className="w-4 cursor-pointer"
-              src={assets.play_icon}
-              alt=""
-            />
-          )}
+import { useState, useRef } from "react";
+import { FaPlay, FaPause, FaVolumeUp, FaHeart, FaRandom } from "react-icons/fa"; // Для иконок
 
-          
-          <img className="w-4 cursor-pointer" src={assets.loop_icon} alt="" />
+const Player = ({ track }) => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(0);
+  const audioRef = useRef(null); 
+  
+  
+  
+  const togglePlay = () => {
+    if (isPlaying) {
+      audioRef.current.pause();
+    } else {
+      audioRef.current.play();
+    }
+    setIsPlaying(!isPlaying);
+  };
+
+  
+  const handleTimeUpdate = () => {
+    setCurrentTime(audioRef.current.currentTime);
+  };
+
+ 
+  const handleLoadedMetadata = () => {
+    setDuration(audioRef.current.duration);
+  };
+
+  
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? "0" : ""}${seconds}`;
+  };
+
+  return (
+    <div className="fixed bottom-0 w-full bg-black text-white p-4 flex items-center justify-between">
+      {/* Левая часть плеера: обложка и название трека */}
+      <div className="flex items-center">
+        <img src={track.image} alt={track.title} className="w-16 h-16 mr-4" />
+        {console.log(track.image)
+        }
+        <div>
+          <p>{track.title}</p>
+          <p className="text-sm text-gray-400">{track.artist}</p>
         </div>
-        <div className="flex items-center gap-5">
-          <p>{time.currentTime.minute}:{time.currentTime.second}</p>
-          <div
-            ref={seekBg}
-            onClick={seekSong}
-            className="w-[60vw] max-w-[500px] bg-gray-300 rounded-full cursor-pointer"
-          >
-            <hr
-              ref={seekBar}
-              className="h-1 border-none w-0 bg-green-800 rounded-full"
-            />
-          </div>
-          <p>{time.totalTime.minute}:{time.totalTime.second}</p>
+        <FaHeart className="text-green-500 ml-4" />
+      </div>
+
+      {/* Центральная часть плеера: элементы управления */}
+      <div className="flex items-center gap-4">
+        <FaRandom />
+        {isPlaying ? (
+          <FaPause onClick={togglePlay} className="cursor-pointer" size={30} />
+        ) : (
+          <FaPlay onClick={togglePlay} className="cursor-pointer" size={30} />
+        )}
+
+        {/* Полоса времени и текущий прогресс */}
+        <div className="flex items-center gap-2">
+          <span>{formatTime(currentTime)}</span>
+          <input
+            type="range"
+            min="0"
+            max={duration}
+            value={currentTime}
+            onChange={(e) => (audioRef.current.currentTime = e.target.value)}
+            className="w-40"
+          />
+          <span>{formatTime(duration)}</span>
         </div>
       </div>
-      <div className="hidden lg:flex items-center gap-2 opacity-75">
-        
-        <img className="w-4" src={assets.volume_icon} alt="" />
-        <div className="w-20 bg-slate-50 h-1 rounded"></div>
-       
+
+      {/* Правая часть: громкость */}
+      <div className="flex items-center gap-2">
+        <FaVolumeUp />
+        <input
+          type="range"
+          min="0"
+          max="1"
+          step="0.01"
+          onChange={(e) => (audioRef.current.volume = e.target.value)}
+          className="w-20"
+        />
       </div>
+
+      {/* Элемент аудио (скрытый) */}
+      <audio
+        ref={audioRef}
+        src={track.src}
+        onTimeUpdate={handleTimeUpdate}
+        onLoadedMetadata={handleLoadedMetadata}
+      />
     </div>
   );
 };

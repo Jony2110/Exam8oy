@@ -2,12 +2,15 @@ import { Route, Routes} from "react-router-dom"
 import DisplayHome from "./DisplayHome"
 import DisplayAlbum from "./DisplayAlbum"
 import {useRef} from "react"
+import { PlayerProvider } from "../context/PlayerContext";
+import LikedSongsPage from "../pages/LikedSongsPage";
 
 
 const Display = () => {
   const displayRef = useRef();
  
   
+ 
 
   const getToken = async () => {
     try {
@@ -38,10 +41,14 @@ const Display = () => {
   
   return (
     <div ref={displayRef} className="w-[100%]   rounded bg-[#121212] text-white overflow-auto lg:w-[75%] lg:ml-0">
+        <PlayerProvider>
+
         <Routes>
             <Route path="/" element={<DisplayHome/>}/>
             <Route path="/album/:id" element={<DisplayAlbum/>}/>
+            <Route path="/liked-songs" element={<LikedSongsPage />} />
         </Routes>
+        </PlayerProvider>
     </div>
   )
 }
