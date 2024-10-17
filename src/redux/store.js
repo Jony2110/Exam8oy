@@ -1,8 +1,11 @@
-import { createStore } from 'redux';
-import rootReducer from './reducers'; // убедитесь, что путь к вашему редюсеру правильный
+// store.js
+import { configureStore } from '@reduxjs/toolkit';
+import likedSongsReducer from './likedSongsSlice'; // путь к вашему срезу
 
-// Создание Redux хранилища
-const store = createStore(rootReducer);
+const store = configureStore({
+  reducer: {
+    likedSongs: likedSongsReducer,
+  },
+});
 
-// Экспорт по умолчанию
 export default store;

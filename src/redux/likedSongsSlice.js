@@ -1,16 +1,22 @@
+// likedSongsSlice.js
 import { createSlice } from '@reduxjs/toolkit';
 
 const likedSongsSlice = createSlice({
   name: 'likedSongs',
-  initialState: [],
+  initialState: {
+    songs: [],
+  },
   reducers: {
     addSong: (state, action) => {
-      state.push(action.payload);
+      const existingSong = state.songs.find(song => song.id === action.payload.id);
+      if (!existingSong) {
+        state.songs.push(action.payload);
+      }
     },
     removeSong: (state, action) => {
-      return state.filter(song => song.id !== action.payload.id);
-    }
-  }
+      state.songs = state.songs.filter(song => song.id !== action.payload.id);
+    },
+  },
 });
 
 export const { addSong, removeSong } = likedSongsSlice.actions;

@@ -7,12 +7,13 @@ import { addSong, removeSong } from '../redux/likedSongsSlice';
 
 const DisplayAlbum = () => {
   const { id } = useParams();
-  const { playWithId } = useContext(PlayerContext);  
   const [albumData, setAlbumData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [currentTrackId, setCurrentTrackId] = useState(null); 
+  const [audio, setAudio] = useState(null);  // Хранение текущего элемента аудио
+  const [isPlaying, setIsPlaying] = useState(false);  // Статус воспроизведения
   const dispatch = useDispatch();
-  const likedSongs = useSelector((state) => state.likedSongs);  
+  const likedSongs = useSelector((state) => state.likedSongs.songs);  
 
   useEffect(() => {
     const fetchAlbumData = async () => {
@@ -52,12 +53,52 @@ const DisplayAlbum = () => {
 
   const handleLike = (track, e) => {
     e.stopPropagation(); // Остановка всплытия события
-    dispatch(addSong(track)); 
+
+    const existingSong = likedSongs.find(song => song.id === track.id);
+    if (existingSong) {
+      dispatch(removeSong(track)); // Удаление из избранного
+    } else {
+      dispatch(addSong(track)); // Добавление в избранное
+    }
   };
 
-  const handleTrackClick = (trackId) => {
-    setCurrentTrackId(trackId);  
-    playWithId(trackId);  
+  const handleTrackClick = (track) => {
+    if (audio) {
+      audio.pause();  // Остановить предыдущий трек
+    }
+
+    if (currentTrackId === track.id && isPlaying) {
+      setIsPlaying(false);
+      setCurrentTrackId(null);
+    } else {
+      const newAudio = new Audio(track.preview_url);  // Использовать preview_url для воспроизведения
+      setAudio(newAudio);
+      newAudio.play();
+      setCurrentTrackId(track.id);  
+      setIsPlaying(true);
+    }
+  };
+
+  const handlePlayPause = (track) => {
+    if (currentTrackId === track.id) {
+      if (isPlaying) {
+        audio.pause();
+        setIsPlaying(false);
+      } else {
+        audio.play();
+        setIsPlaying(true);
+      }
+    } else {
+      // Если выбран другой трек, остановить текущий и начать новый
+      if (audio) {
+        audio.pause();
+      }
+      const newAudio = new Audio(track.preview_url);
+      setAudio(newAudio);
+      newAudio.play();
+      setCurrentTrackId(track.id);
+      setIsPlaying(true);
+    }
   };
 
   return (
@@ -81,13 +122,13 @@ const DisplayAlbum = () => {
       {albumData.tracks.items.map((item, index) => (
         <div
           key={item.track.id}
-          onClick={() => handleTrackClick(item.track.id)}
+          onClick={() => handleTrackClick(item.track)}
           className={`grid grid-cols-3 sm:grid-cols-4 gap-2 p-2 items-center cursor-pointer ${
             item.track.id === currentTrackId ? 'bg-[#ffffff2b] text-green-500' : ''
           }`}
         >
           <div className="text-white text-sm md:text-[15px]">
-            {item.track.id === currentTrackId ? (
+            {item.track.id === currentTrackId && isPlaying ? (
               <img className="inline w-6 mb-5 mr-5" src="../../public/img/icon2110.webp" alt="Playing Icon" />
             ) : (
               <b className="mr-4 text-[#a7a7a7]">{index + 1}</b>
@@ -105,8 +146,13 @@ const DisplayAlbum = () => {
           <div className="flex gap-4 ml-16">
             <button 
               onClick={(e) => handleLike(item.track, e)} 
-              className="text-green-500 text-center">
+              className={`text-green-500 text-center ${likedSongs.some(song => song.id === item.track.id) ? 'text-red-500' : ''}`}>
               ❤️
+            </button>
+            <button 
+              onClick={(e) => { e.stopPropagation(); handlePlayPause(item.track); }} 
+              className="text-green-500 text-center">
+              {item.track.id === currentTrackId && isPlaying ? "⏸️" : "▶️"} {/* Кнопка play/pause */}
             </button>
             <p className="text-[15px] text-center">{(item.track.duration_ms / 60000).toFixed(2)} min</p>
           </div>
