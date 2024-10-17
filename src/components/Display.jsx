@@ -4,6 +4,7 @@ import DisplayAlbum from "./DisplayAlbum"
 import {useRef} from "react"
 import { PlayerProvider } from "../context/PlayerContext";
 import LikedSongsPage from "../pages/LikedSongsPage";
+import LikedSongs from "../pages/LikedSongs";
 
 
 const Display = () => {
@@ -47,6 +48,7 @@ const Display = () => {
             <Route path="/" element={<DisplayHome/>}/>
             <Route path="/album/:id" element={<DisplayAlbum/>}/>
             <Route path="/liked-songs" element={<LikedSongsPage />} />
+            <Route path="/liked" element={<LikedSongs />} />
         </Routes>
         </PlayerProvider>
     </div>

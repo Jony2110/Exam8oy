@@ -116,7 +116,7 @@ const DisplayAlbum = () => {
         <p><b className="mr-4">#</b>Title</p>
         <p>Album</p>
         <p className="hidden sm:block">Date Added</p>
-        <img className="m-auto w-4" src="../../public/img/clock.svg" alt="Clock Icon" />
+        <img className="m-auto ml-40 w-4" src="../../public/img/clock.svg" alt="Clock Icon" />
       </div>
       <hr />
       {albumData.tracks.items.map((item, index) => (
@@ -146,8 +146,8 @@ const DisplayAlbum = () => {
           <div className="flex gap-4 ml-16">
             <button 
               onClick={(e) => handleLike(item.track, e)} 
-              className={`text-green-500 text-center ${likedSongs.some(song => song.id === item.track.id) ? 'text-red-500' : ''}`}>
-              ❤️
+              className="text-center">
+              {likedSongs.some(song => song.id === item.track.id) ? '❤️' : '🤍'} {/* Поменяли иконку на лайк или пустое сердечко */}
             </button>
             <button 
               onClick={(e) => { e.stopPropagation(); handlePlayPause(item.track); }} 
