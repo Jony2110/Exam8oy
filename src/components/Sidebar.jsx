@@ -15,7 +15,7 @@ const Sidebar = () => {
           <p className="font-b old">Search</p>
         </div>
           <div className="flex items-center gap-3">
-            <img className="w-8 ml-7" src="../../public/img/3.svg" alt="stack_icon" />
+            <img className="w-8 ml-7" src="./img/3.svg" alt="stack_icon" />
             <p className="font-semibold">Your Libary</p>
           </div>
       </div>
@@ -26,7 +26,7 @@ const Sidebar = () => {
             <p className="font-semibold">Create Playlist</p>
           </div>
           <div className="flex items-center gap-3">
-            <img className="w-8  ml-7" src="../../public/img/Liked.svg" alt="stack_icon" />
+            <img className="w-8  ml-7" src="./img/Liked.svg" alt="stack_icon" />
             <p className="font-semibold">Liked songs</p>
           </div>
         

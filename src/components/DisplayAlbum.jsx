@@ -70,7 +70,7 @@ const DisplayAlbum = () => {
         <p><b className="mr-4">#</b>Title</p>
         <p>Album</p>
         <p className="hidden sm:block">Date Added</p>
-        <img className="m-auto w-4" src="../../public/img/clock.svg" alt="Clock Icon" />
+        <img className="m-auto w-4" src="./img/clock.svg" alt="Clock Icon" />
       </div>
       <hr />
       {albumData.tracks.items.map((item, index) => (
